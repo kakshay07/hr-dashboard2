@@ -1,0 +1,101 @@
+.app_main_container{
+    display: grid;
+    grid-template-columns: 80px auto;
+    min-height: 100vh;
+}
+
+.app_main_container .sideBar{
+    background-color: #1d1f22;
+    box-shadow: 0 -20px 8px #000000;
+    display: flex;
+    flex-wrap: wrap;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+
+    }
+
+.app_main_container .sideBar .sidebar_list *{
+    list-style: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.app_main_container .sideBar ul.sidebar_list{
+    width: 100%;
+    padding: 0;
+}
+
+.app_main_container .sideBar .sidebar_list li a{
+    padding: 20px 0;
+    border-bottom: 1px solid #272727;
+    width: 100%;
+    text-align: center;
+    position: relative;
+    display: block;
+    background-color: transparent;
+    text-decoration: none;
+}
+
+.app_main_container .sideBar .sidebar_list li a:hover{
+    background-color: #303337;
+}
+
+.app_main_container .sideBar .sidebar_list li a.active:before{
+    content: '';
+    background-color: #fff;
+    width: 20px;
+    height : 20px;
+    position: absolute;
+    right: -10px;
+    top:50%;
+    transform: translateY(-50%) rotate(45deg) ;
+    background-color: #303337;
+    opacity: 0;
+    animation: fadeINBefore .1s linear forwards;
+}
+
+.app_main_container .sideBar .sidebar_list li a.active{
+    background-color: #303337;
+}
+
+@keyframes fadeINBefore {
+    to{
+        opacity: 1;
+    }
+}
+
+.app_main_container .sideBar i{
+    font-size: 30px;
+    color: #525252;
+}
+
+.app_main_container .sideBar .sidebar_list li a.active i{
+    font-size: 30px;
+    color: #adadad;
+}
+
+
+.app_main_container .sideBar .profileTab{
+    height: 55px;
+    margin-top: auto;
+    width: 70%;
+    border-radius: 10px;
+    background-color: #000000;
+    display: grid;
+    place-items: center;
+    margin: auto auto 10px auto;
+    cursor: pointer;
+    z-index: 4;
+}
+
+.app_main_container .sideBar .profileTab .dropdown-menu li button{
+    margin: 0 auto;
+    width: 90%;
+    border-radius: 5px;
+}
+
+.app_main_container .sideBar .profileTab .dropdown-menu li button:hover{
+    background-color: #00000077 !important;
+}

@@ -1,0 +1,15 @@
+#login_main_container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+#login_main_container form{
+    width: 500px;
+    background-color: rgb(0, 0, 0);
+}
+
+#login_main_container label{
+    color: #fff;
+}
