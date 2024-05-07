@@ -28,6 +28,8 @@ export function App() {
         <Router>
           <Route path='/' component={JobOpening}/>
           <Route path='/applicants' component={JobApplicants}/>
+          <Route path='/department' component={JobApplicants}/>
+
           <Login path='/login' />
         </Router>
       </div>

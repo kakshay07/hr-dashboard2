@@ -14,13 +14,20 @@ export const requestHandler = async (
     try {
         // Make the API request
         const response = await api();
+        
         const { data } = response;
+        console.log(response);
+        
+        
         if (data?.success) {
+            
             // Call the onSuccess callback with the response data
             onSuccess(data);
         }
     } catch (error: any) {
         onError(error?.response?.data?.message || 'Something went wrong');
+        console.log(error);
+        
     } finally {
         // Hide loading state if setLoading function is provided
         setLoading && setLoading(false);

@@ -4,6 +4,7 @@ export class profileInfo {
 }
 
 export class jobData {
+    id:number=0;
     position : string = '';
     department : string = '';
     experience : string = '';
@@ -12,4 +13,15 @@ export class jobData {
     description : string = '';
     isArchive : string = 'false'
     profileInformation : profileInfo[] = []
+}
+
+export class applicantData{
+    name: string='';
+    email:string='';
+    phone:string='';
+    message:string='';
+    isArchive : string = 'false';
+    resume:string='';
+
+
 }

@@ -5,7 +5,7 @@ import Loader from "../../components/Loader";
 import './JobOpening.css'
 import PageLayout from "../../components/PageLayout/PageLayout";
 import { requestHandler } from "../../utils";
-import { addJobOpening, editJobOpening, getAllJobOpenings } from "../../api";
+import { addJobOpening, editJobOpening, getAllJobOpenings } from "../../api";//
 
 const JobOpening : preact.FunctionComponent = () => {
     const [loading, setloading] = useState(false);
@@ -14,6 +14,7 @@ const JobOpening : preact.FunctionComponent = () => {
     const [option, setoption] = useState<'add' | 'edit' | 'view'>('add')
     const [data, setData] = useState<jobData>(new jobData);
     const [allData, setAllData] = useState<jobData[]>([{
+        id:0,
         position: 'engeneer',
         department: 'IT',
         experience: '4+ Years',
@@ -29,46 +30,7 @@ const JobOpening : preact.FunctionComponent = () => {
             ]
         }]
     },
-    {
-        position: 'engeneer 2',
-        department: 'IT',
-        experience: '4+ Years',
-        jobType: 'Full Time',
-        location: 'Udupi',
-        description: '',
-        isArchive : 'false',
-        profileInformation: []
-    },
-    {
-        position: 'engeneer 3',
-        department: 'IT',
-        experience: '4+ Years',
-        jobType: 'Full Time',
-        location: 'Udupi',
-        description: '',
-        isArchive : 'true',
-        profileInformation: []
-    },
-    {
-        position: 'engeneer 4',
-        department: 'IT',
-        experience: '4+ Years',
-        jobType: 'Full Time',
-        location: 'Udupi',
-        description: '',
-        isArchive : 'false',
-        profileInformation: []
-    },
-    {
-        position: 'engeneer 5' ,
-        department: 'IT',
-        experience: '4+ Years',
-        jobType: 'Full Time',
-        location: 'Udupi',
-        description: '',
-        isArchive : 'false',
-        profileInformation: []
-    }
+   
 ])
 
     // function to add new job-profile info 
@@ -166,6 +128,8 @@ const JobOpening : preact.FunctionComponent = () => {
                 //this is of no use since we need only string values
                 value = (state[name] as profileInfo[]).map(item => item.toString());
             } else {
+                // console.log(state[name]  , name);
+                
                 value = state[name].toString();
             }
 
@@ -182,7 +146,8 @@ const JobOpening : preact.FunctionComponent = () => {
         e.preventDefault();
         if(option === 'add'){
             console.log('Add');
-            console.log(JSON.stringify(data));
+            // console.log(JSON.stringify(data));
+            console.log("here the data comes")
 
             requestHandler(
                 async ()=> await addJobOpening(data),
@@ -190,12 +155,12 @@ const JobOpening : preact.FunctionComponent = () => {
                 ()=>{alert('Added successfully !')},
                 alert
             )
-
+            // setData(" ");
             handleGetAllJobOpenings();
 
         } else if(option === 'edit'){
-            console.log('Edit');
-            console.log(JSON.stringify(data));
+            // console.log('Edit');
+            // console.log(JSON.stringify(data),"hello");
 
             requestHandler(
                 async ()=> await editJobOpening(data),
@@ -205,7 +170,11 @@ const JobOpening : preact.FunctionComponent = () => {
             )
 
             handleGetAllJobOpenings();
+         
         }
+        handleGetAllJobOpenings();
+        handleGetAllJobOpenings();
+        
     }
 
     // function to get all job openings
@@ -213,7 +182,21 @@ const JobOpening : preact.FunctionComponent = () => {
         return requestHandler(
             async ()=> await getAllJobOpenings(),
             setloadingTable,
-            ()=>{},
+            (response) => {
+                console.log((typeof response.data));
+                // setAllData([]);
+                // for(let data1 of response.data){
+                //     console.log(data1.profileInformation ? 'true' :'false' );
+                    
+                //     if(data1.profileInformation){
+                //         setAllData(prev => ([...prev , {...data1 ,  profileInformation : JSON.parse(data1.profileInformation)}]))
+                //     } else {
+                //         setAllData(prev => ([...prev , {...data1 , profileInformation : [] }]))
+                //     }
+                // }
+                setAllData(response.data);
+            },
+          
             alert
         )
     } 
@@ -223,6 +206,11 @@ const JobOpening : preact.FunctionComponent = () => {
         handleGetAllJobOpenings();
     }, [])
 
+    useEffect(() => {
+        console.log(data , 'data');
+        
+    }, [data]) // it is used to log the data every time when we make changes to data while typing or other changes to data haapens at time 
+    
     return (
         <>
             {
@@ -238,14 +226,15 @@ const JobOpening : preact.FunctionComponent = () => {
                                     <option selected value=''>Choose Department</option>
                                     <option value='Design'>Design</option>
                                     <option value='IT'>IT</option>
+                                    <option value='commerce'>Commerce</option>
+                                    <option value='Networking'>Networking</option>
+                                    <option value='Financial'>Financial</option>
+                                    <option value='HR'>Human Resources</option>
                                 </select>
                             </div>
                             <div class="col-3">
-                                <select required onInput={e => handleOnChange(e)} {...attributeHandler('position')} id="inputState" class="form-select" >
-                                    <option selected value=''>Choose Position</option>
-                                    <option value='Design'>Design</option>
-                                    <option value='IT'>IT</option>
-                                </select>
+                            <input required onInput={e => handleOnChange(e)} {...attributeHandler('position')} id="inputState" class="form-control" placeholder="Type or write your position"/>
+
                             </div>
                             <div class="col-3">
                                 <input required onInput={e => handleOnChange(e)} {...attributeHandler('experience')} type="text" class="form-control" placeholder="Experience" aria-label="Zip" />
@@ -254,6 +243,8 @@ const JobOpening : preact.FunctionComponent = () => {
                                 <select required onInput={e => handleOnChange(e)} {...attributeHandler('jobType')} id="inputState" class="form-select" >
                                     <option selected value=''>Choose Job Type</option>
                                     <option value='Full Time'>Full Time</option>
+                                    <option value='Part Time'>Part Time</option>
+                                    
                                 </select>
                             </div>
                             <div class="col-3">
@@ -262,7 +253,7 @@ const JobOpening : preact.FunctionComponent = () => {
                             <div class="col-9">
                                 <input onInput={e => handleOnChange(e)} {...attributeHandler('description')} type="text" class="form-control" placeholder="Description" aria-label="Zip" />
                             </div>
-                            {
+                            {/* {
                                 option !== 'add' &&
                                 <div class="col-3">
                                     <select onInput={e => handleOnChange(e)} {...attributeHandler('isArchive')} id="inputState" class="form-select" >
@@ -270,16 +261,15 @@ const JobOpening : preact.FunctionComponent = () => {
                                         <option value='false'>Active</option>
                                     </select>
                                 </div>
-                            }
+                            } */}
                             <div className="col-12 mt-5 ">
                                 <button type='button' className="btn btn-success w-20" onClick={handleAddProfileInfo}>Add Profile Information</button>
                             </div>
                             
 
                             {   
-                                // mapping all job-profile information 
-                                data?.profileInformation.map(
-                                    (info, index) => {
+                                (data?.profileInformation.map(
+                                    (info : profileInfo , index : number) => {
                                         let thisRef = elRefs.current[index];
                                         return (
                                             <div ref={thisRef} className="border border-2 rounded col-12 p-4 row mt-4 mx-0 position-relative">
@@ -305,7 +295,7 @@ const JobOpening : preact.FunctionComponent = () => {
                                             </div>
                                         )
                                     }
-                                )
+                                ))
                             }
 
                         </fieldset>
@@ -317,10 +307,12 @@ const JobOpening : preact.FunctionComponent = () => {
                             onClick={()=>{
                                 setoption('add');
                                 setData(new jobData);
+                                window.scrollTo(0,0);
                             }}>Cancel</button>
                         </div>
                     </form>
-                            
+
+
                     <div className="border border-2 border-dark rounded p-0 mt-4 mb-5">
                         <table class="table table-dark table-striped m-0">
                             <thead>
@@ -329,19 +321,21 @@ const JobOpening : preact.FunctionComponent = () => {
                                     <th width='20%' scope="col">Department</th>
                                     <th width='20%' scope="col">Experience</th>
                                     <th width='20%' scope="col">Job Type</th>
+                                    <th width="20%" scope='col'>Job Location</th>
                                     <th width='20%' scope="col">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {
-                                    !loadingTable && allData.map(
-                                        data => {
+                                      !loadingTable && allData.map(
+                                        (data)=> {
                                             return (
-                                                <tr class={`${data.isArchive === 'true' && 'opacity-251'}`}>
+                                                <tr key={data.id} class={`${data.isArchive === 'true' && 'opacity-251'}`}>
                                                     <th>{data.position}</th>
                                                     <td>{data.department}</td>
-                                                    <td>{data.experience}</td>
+                                                    <td>{data.experience}+years</td>
                                                     <td>{data.jobType}</td>
+                                                    <td>{data.location}</td>
                                                     <td>
                                                         <button onClick={() => {
                                                             setoption('edit');
@@ -350,6 +344,7 @@ const JobOpening : preact.FunctionComponent = () => {
                                                         }}
                                                             class='btn btn-success'>Edit
                                                         </button>
+                                                        
                                                         <button
                                                             onClick={() => {
                                                                 setoption('view');
@@ -362,7 +357,7 @@ const JobOpening : preact.FunctionComponent = () => {
                                                         <button
                                                             onClick={()=>{
                                                                 setAllData(prevData => {
-                                                                    return prevData.filter(obj => (obj != data))
+                                                                    return prevData.filter(obj => {return obj != data})
                                                                 })
                                                             }}
                                                             class='btn btn-danger'>Delete
@@ -426,7 +421,7 @@ const TableRowPlaceholder = () => {
                 </p>
             </td>
             <td>
-                <a class="btn btn-success disabled placeholder placeholder-glow col-3 " aria-disabled="true"></a>
+                <a class="btn btn-success  placeholder placeholder-glow col-3 " aria-disabled="true"></a>
                 <a class="btn btn-warning disabled placeholder col-3 mx-1" aria-disabled="true"></a>
                 <a class="btn btn-danger disabled placeholder col-3 " aria-disabled="true"></a>
             </td>

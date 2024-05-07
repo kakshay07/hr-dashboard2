@@ -25,15 +25,16 @@ export const loginUser = (data: { username: string; password: string }) => {
 };
 
 export const getAllJobOpenings = () => {
-    return apiClient.get('/job');
+    return apiClient.get('/get/jobs');
 };
 
 export const addJobOpening = (data : jobData) => {
-    return apiClient.post('/job' , data);
+    return apiClient.post('/Add/jobs' , data);
 };
 
 export const editJobOpening = (data : jobData) => {
-    return apiClient.put('/job' , data);
+    // console.log(data);
+    return apiClient.put(`/update/${data.id}` , data);
 };
 
 export const deleteJobOpening = (data : {jobId : string}) => {
@@ -41,5 +42,5 @@ export const deleteJobOpening = (data : {jobId : string}) => {
 };
 
 export const getAllJobApplicants = () => {
-    return apiClient.post('/job/appliants');
+    return apiClient.get('/get/applicants');
 };

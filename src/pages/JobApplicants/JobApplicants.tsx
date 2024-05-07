@@ -1,5 +1,5 @@
 import { useEffect, useState } from "preact/hooks";
-import { jobData } from "../../interface/jobOpenings";
+import { applicantData} from "../../interface/jobOpenings";
 import './JobApplicants.css';
 import PageLayout from "../../components/PageLayout/PageLayout";
 import { requestHandler } from "../../utils";
@@ -9,63 +9,8 @@ const JobApplicants : preact.FunctionComponent = () => {
 
     const [pdfURL , setpdfURL] = useState('');
 
-    const [allData, setAllData] = useState<jobData[]>([{
-            position: 'engeneer',
-            department: 'IT',
-            experience: '4+ Years',
-            jobType: 'this is the message',
-            location: 'Udupi',
-            description: 'https://www.africau.edu/images/default/sample.pdf',
-            isArchive : 'false',
-            profileInformation: [{
-                heading: 'this is a heading',
-                content: [
-                    'this is a content',
-                    'this is content 2',
-                ]
-            }]
-        },
-        {
-            position: 'engeneer 2',
-            department: 'IT',
-            experience: '4+ Years',
-            jobType: 'Full Time',
-            location: 'Udupi',
-            description: 'https://morth.nic.in/sites/default/files/dd12-13_0.pdf',
-            isArchive : 'false',
-            profileInformation: []
-        },
-        {
-            position: 'engeneer 3',
-            department: 'IT',
-            experience: '4+ Years',
-            jobType: 'Full Time',
-            location: 'Udupi',
-            description: 'https://www.africau.edu/images/default/sample.pdf',
-            isArchive : 'true',
-            profileInformation: []
-        },
-        {
-            position: 'engeneer 4',
-            department: 'IT',
-            experience: '4+ Years',
-            jobType: 'Full Time',
-            location: 'Udupi',
-            description: 'https://morth.nic.in/sites/default/files/dd12-13_0.pdf',
-            isArchive : 'false',
-            profileInformation: []
-        },
-        {
-            position: 'engeneer 5' ,
-            department: 'IT',
-            experience: '4+ Years',
-            jobType: 'Full Time',
-            location: 'Udupi',
-            description: 'https://www.africau.edu/images/default/sample.pdf',
-            isArchive : 'false',
-            profileInformation: []
-        
-        }
+    const [allData, setAllData] = useState<applicantData[] >([
+       
     ])
 
     const [loading, setloading] = useState(false);
@@ -77,20 +22,24 @@ const JobApplicants : preact.FunctionComponent = () => {
 
     useEffect(() => {
         document.title = 'Job Applicants';
-
+        
         requestHandler(
             getAllJobApplicants,
             setloading,
             (response) => {
+                console.log(response.data);
                 setAllData(response.data)
             },
             alert
         );
-        setpdfURL('')
+        setpdfURL('');
     }, [])
     
   return (
     <>
+        {
+            loading && <div>Loading</div>
+        }
         <PageLayout heading="Job Applicants">
 
             <div id="jobApplicants">
@@ -120,20 +69,24 @@ const JobApplicants : preact.FunctionComponent = () => {
                             {
                                 !loading && allData.map(
                                     (data, index) => {
+                                       
                                         return (
                                             <tr class={`${data.isArchive === 'true' && 'opacity-251'}`}>
                                                 <th>{index+1}</th>
-                                                <th>{data.position}</th>
-                                                <td>{data.department}</td>
-                                                <td>{data.experience}</td>
-                                                <td>{data.jobType}</td>
+                                                <th>{data.name}</th>
+                                                <td>{data.email}</td>
+                                                <td>{data.phone}</td>
+                                                <td>{data.message}</td>
+                                                {/* <td>{data.id}</td> */}
+                                               
+                                 
                                                 <td>
                                                     <a
-                                                        class='btn btn-success'
-                                                        // data-bs-toggle="modal" 
-                                                        // data-bs-target="#exampleModal"
-                                                        // onClick={()=>{setpdfURL(data.description)}}
-                                                        href={data.description}
+                                                        class='btn btn-warning'
+                                                        data-bs-toggle="modal" 
+                                                        data-bs-target="#exampleModal"
+                                                        onClick={()=>{setpdfURL(data.resume)}}
+                                                        href={`uploads/images/${data.resume}`}
                                                         target={'_'}
                                                         >
                                                             View Resume
@@ -145,12 +98,14 @@ const JobApplicants : preact.FunctionComponent = () => {
                                 )
                             }
 
-                            {/* === loading state ===  */}
+                            {/* === loading state ===  */} 
                             {loading && 
                             <>
                                 <TableRowPlaceholder/>
                                 <TableRowPlaceholder/>
                                 <TableRowPlaceholder/>
+                                <TableRowPlaceholder/>
+                              
                             </>
                             }
 
@@ -171,7 +126,7 @@ const JobApplicants : preact.FunctionComponent = () => {
                 {/* resume modal  */}
 
                 <div class="modal modal-centered" id='exampleModal' tabindex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-scrollable modal-lg ">
+                    <div class="modal-dialog modal-dialog-scrollable modal-lg">
                         <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
