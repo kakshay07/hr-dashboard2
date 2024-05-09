@@ -38,7 +38,7 @@ const JobApplicants : preact.FunctionComponent = () => {
   return (
     <>
         {
-            loading && <div>Loading</div>
+            loading && <div>Loading..</div>
         }
         <PageLayout heading="Job Applicants">
 

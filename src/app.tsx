@@ -5,6 +5,7 @@ import Sidebar from './components/Sidebar';
 import JobApplicants from './pages/JobApplicants/JobApplicants';
 import PrivateComponent from './components/PrivateComponent';
 import Login from './components/Login/Login';
+import Departmnet from './pages/department/department';
 export function App() {
 
   return (
@@ -28,7 +29,7 @@ export function App() {
         <Router>
           <Route path='/' component={JobOpening}/>
           <Route path='/applicants' component={JobApplicants}/>
-          <Route path='/department' component={JobApplicants}/>
+          <Route path='/department' component={Departmnet}/>
 
           <Login path='/login' />
         </Router>

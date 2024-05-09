@@ -6,6 +6,7 @@ export class profileInfo {
 export class jobData {
     id:number=0;
     position : string = '';
+    dept_name:string='';
     department : string = '';
     experience : string = '';
     jobType : string = '';
@@ -24,4 +25,7 @@ export class applicantData{
     resume:string='';
 
 
+}
+export class department{
+    dept_name:string=''
 }

@@ -23,7 +23,7 @@ const Sidebar = () => {
             </li>
             <li class='active'>
                 <a class={`${activeTab === 'department' && 'active'}`} href='/department' onClick={()=>setActiveTab('department')}>
-                    <i  class="fa-solid fa-add"></i>
+                    <i  class="fa-solid fa-code"></i>
                 </a>
             </li>
             
