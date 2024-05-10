@@ -99,12 +99,12 @@ function handlegetDepartment () {
                             }}>Cancel</button>
                         </form>
                       
-                        <table class="table table-dark table-striped mt-3 ">
+                        <table class="table table-dark table-striped mt-3 shadow-sm border border-2 border-dark rounded ">
                             <thead>
                                 <tr>
-                           
+                                    <th class='col-12' width='20%' scope="col">D_Id</th>
                                     <th class='col-12' width='20%' scope="col">Department</th>
-                                    <th class='col-1' width='20%' scope="col">Action</th>
+                                    <th class='col-2' width='20%' scope="col">Action</th>
                                   
                                 </tr>
                             </thead>
@@ -115,6 +115,7 @@ function handlegetDepartment () {
                                             return (
                                                 
                                                 <tr class='' key={data.id} >
+                                                    <td >{data.id}</td>
                                                     <td class=''>{data.dept_name}</td>
                                                   
                                                    

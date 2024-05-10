@@ -37,6 +37,11 @@ export const editJobOpening = (data : jobData) => {
     return apiClient.put(`/update/${data.id}` , data);
 };
 
+export const viewApplicants=(data:jobData)=>{
+    console.log(data.id,"this is inside view api")
+    return apiClient.get(`/getapplicantById/${data.id}`);
+}
+
 export const deleteJobOpening = (data : {jobId : string}) => {
     return apiClient.post('/job' , data);
 };

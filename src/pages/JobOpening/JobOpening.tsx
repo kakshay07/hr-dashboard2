@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "preact/hooks";
-import { jobData, profileInfo } from "../../interface/jobOpenings";
+import { applicantData, jobData, profileInfo } from "../../interface/jobOpenings";
 import { createRef, h } from "preact";
 import Loader from "../../components/Loader";
 // import handlegetDepartment from "../department/department";
@@ -7,7 +7,7 @@ import "./JobOpening.css";
 import PageLayout from "../../components/PageLayout/PageLayout";
 import { requestHandler } from "../../utils";
 import axios from "axios";
-import { addJobOpening, editJobOpening, getAllJobOpenings } from "../../api"; //
+import { addJobOpening, editJobOpening, getAllJobOpenings,} from "../../api"; //
 
 const JobOpening: preact.FunctionComponent = () => {
   const [loading, setloading] = useState(false);
@@ -16,6 +16,7 @@ const JobOpening: preact.FunctionComponent = () => {
   const [option, setoption] = useState<"add" | "edit" | "view">("add");
   const [data, setData] = useState<jobData>(new jobData());
   const [newdata, setnewData] = useState<jobData>();
+  const [applicant,setApplicant]=useState<applicantData[]>();
   const [allData, setAllData] = useState<jobData[]>([
     //
     // {    id:0,
@@ -193,9 +194,10 @@ const JobOpening: preact.FunctionComponent = () => {
       );
 
       handleGetAllJobOpenings();
-    }
+    } 
     handleGetAllJobOpenings();
     handleGetAllJobOpenings();
+   
   }
 
   // function to get all job openings
@@ -204,7 +206,7 @@ const JobOpening: preact.FunctionComponent = () => {
       async () => await getAllJobOpenings(),
       setloadingTable,
       (response) => {
-        console.log(typeof response.data);
+        // console.log(typeof response.data);
         // setAllData([]);
         // for(let data1 of response.data){
         //     console.log(data1.profileInformation ? 'true' :'false' );
@@ -236,15 +238,37 @@ const JobOpening: preact.FunctionComponent = () => {
       });
   }
 
+
+// view applicant 
+function viewApplicants(data:jobData) {
+  axios
+    .get(`http://localhost:5000/getapplicantById/${data.id}`)
+    .then((response) => {
+      console.log(response.data, "inside view");
+      //  to set only the unique entry to department input option feild
+      // const newData:any= [...new Set(response.data.result.map((item1: { dept_name: string; })=>item1.dept_name))]
+
+      setApplicant(response.data);
+    })
+    .catch((error) => {
+      console.error("error while fetching data", error);
+    });
+}
+
+
+
   useEffect(() => {
     document.title = "Job Openings Master";
     handleGetAllJobOpenings();
     handlegetDepartment();
   }, []);
 
-  useEffect(() => {
-    console.log(data, "data");
-  }, [data]); // it is used to log the data every time when we make changes to data while typing or other changes to data haapens at time
+
+
+  // useEffect(() => {
+  //   // console.log(applicant, "data");
+  //   viewApplicants(data);
+  // }, [applicant]); // it is used to log the data every time when we make changes to data while typing or other changes to data haapens at time
 
   return (
     <>
@@ -424,8 +448,8 @@ const JobOpening: preact.FunctionComponent = () => {
                 <button
                   type="submit"
                   data-bs-toggle="modal"
-                  data-bs-target="#exampleModal"
-                  class="btn btn-success mt-5 col-2  mx-1"
+                  data-bs-target="#exampleModal1"
+                  class="btn btn-success mt-5 col-2  mx-1" onClick={()=>viewApplicants(data)}
                 >
                   View Applicants
                 </button>
@@ -443,6 +467,7 @@ const JobOpening: preact.FunctionComponent = () => {
               </button>
             </div>
           </form>
+
 
           <div className="border border-2 border-dark rounded p-0 mt-4 mb-5">
             <table class="table table-dark table-striped m-0">
@@ -545,7 +570,7 @@ const JobOpening: preact.FunctionComponent = () => {
 
           <div
             class="modal modal-centered"
-            id="exampleModal"
+            id="exampleModal1"
             tabindex={-1}
             aria-labelledby="exampleModalLabel"
             aria-hidden="true"
@@ -561,11 +586,12 @@ const JobOpening: preact.FunctionComponent = () => {
                   ></button>
                 </div>
                 <div class="modal-body">
-                  <table class="table table-light table-striped m-0">
+            <table class="table table-dark table-striped m-0">
+                 
                     <thead>
                       <tr>
-                        <th width="20%" scope="col w-30">
-                          Position
+                      <th width="20%" scope="col">
+                         sl.no
                         </th>
                         <th width="20%" scope="col">
                           name
@@ -585,23 +611,28 @@ const JobOpening: preact.FunctionComponent = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        {" "}
-                        <td>1</td>
-                        <td>23</td>
-                        <td>3</td>
-                        <td>4</td>
-                        <td>5</td>
-                        <td>6</td>
-                      </tr>
-                      <tr>
-                        <td>23</td>
-                        <td>3</td>
-                        <td>asa</td>
-                        <td>4</td>
-                        <td>5</td>
-                        <td>6</td>
-                      </tr>
+                      
+                    {applicant?.length && applicant.map((result:applicantData,index) => {
+  return (
+   <tr>
+    <td>{index+1}</td>
+      <td>{result.name}</td>
+      <td>{result.email}</td>
+      <td>{result.phone}</td>
+      <td>{result.message}</td>
+      <td>{result.resume.toString()}</td>
+      </tr>
+  );
+})}
+                       
+
+                       {applicant && applicant.length < 1 && (
+                  <tr>
+                    <td colSpan={10} style={"text-align:center;color:#818181"}>
+                      No applicant found oops{` :(`}
+                    </td>
+                  </tr>
+                )}
                     </tbody>
                   </table>
                 </div>
@@ -611,7 +642,7 @@ const JobOpening: preact.FunctionComponent = () => {
                     class="btn btn-secondary"
                     data-bs-dismiss="modal"
                   >
-                    Close
+                    Close now
                   </button>
                   {/* <button type="button" class="btn btn-primary">Download</button> */}
                 </div>
